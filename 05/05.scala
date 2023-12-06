@@ -115,10 +115,10 @@ def part2(input: Seq[String]) = {
   val almanac = Almanac.parse(input)
 
   def doMapping(maps: List[Maps], seeds: List[Long]): Long = {
-    val (seedStarts, seedLengths) = seeds.zipWithIndex.partition((_, index) => (index & 1) == 0)
-    val seedPairs = seedStarts.map(_._1).zip(seedLengths.map(_._1))
-      .map((s, len) => (s, s + len))
-    println(seedPairs)
+    val seedPairs = seeds.grouped(2).map {
+      case start :: len :: Nil => start -> (start + len)
+      case _ => throw new MatchError("Invalid seed pairs!")
+    }.toList
 
     def implRange(s1: Long, s2: Long, maps: List[Maps]): Long = {
       //println(s"Maps ${maps.size}: $s1 $s2")
